@@ -39,9 +39,10 @@ public class Password {
 
     public void crackPassword(){
         double startTime = System.nanoTime();
-        char[] characterList = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&*?|\\".toCharArray();
         String guess = "!";
         long secondTimer = System.nanoTime();
+        int last_check = -1;
+        byte printState = 0;
         
 
         while(!this.password.equals(guess)){
@@ -74,21 +75,27 @@ public class Password {
             }
             
             //System.out.println(guess);
-            /* Find out how to get this to work
-               print something every second to show that it's running still
+            // Find out how to get this to work
+            // print something every second to show that it's running still
             long secondTimerEnd = System.nanoTime();
             int secondsPassed = (int)((secondTimerEnd-secondTimer)/1000000000);
-        
-            if(secondsPassed%3 == 0){
-                System.out.println("\n\n\n\n\nWorking.");
+
+            if (secondsPassed != last_check && secondsPassed % 3 == 0){
+                //System.out.println(secondsPassed + " seconds " + printState);
+                if(printState == 0){
+                    System.out.println("Working.");
+                    printState ++;
+                } 
+                else if(printState == 1){
+                    System.out.println("Working..");
+                    printState ++;
+                }
+                else if(printState == 2){
+                    System.out.println("Working...");
+                    printState = 0;
+                }
+                last_check = secondsPassed;
             }
-            else if (secondsPassed%3 == 1){
-                System.out.println("\n\n\n\n\nWorking..");
-            }
-            else if (secondsPassed%3 == 2){
-                System.out.println("\n\n\n\n\nWorking...");
-            }
-                */
         }
         // Calculate total time taken, convert to seconds
         double endTime = System.nanoTime();
@@ -98,8 +105,11 @@ public class Password {
     }
 
     public void print(){
-        System.out.printf("Password info:\n\tPassword: %s\n\tTime to Crack: %.2f seconds\n\n", this.password, this.time_to_crack);
-    }
+        System.out.printf("Password info:\n\tPassword: %s", this.password);
+        if (time_to_crack > 0.0)
+            System.out.printf("\n\tTime to Crack: %.2f seconds", this.time_to_crack);
+        System.out.print("\n");
+    }   
 
 
 }
